@@ -6,22 +6,22 @@ namespace {
   colorFromCoord(const int x, const int y) {
     constexpr auto size = 4;
     static const auto colors = std::vector<olc::Pixel>{
-      olc::RED,
-      olc::BLUE,
-      olc::GREEN,
-      olc::YELLOW,
-      olc::MAGENTA,
-      olc::CYAN,
-      olc::GREY,
+      olc::VERY_DARK_RED,
+      olc::VERY_DARK_BLUE,
+      olc::VERY_DARK_GREEN,
+      olc::VERY_DARK_YELLOW,
+      olc::VERY_DARK_MAGENTA,
+      olc::VERY_DARK_CYAN,
+      olc::VERY_DARK_GREY,
       olc::WHITE,
-      olc::ORANGE,
-      olc::APPLE_GREEN,
-      olc::COBALT_BLUE,
-      olc::PURPLE,
-      olc::PINK,
-      olc::BROWN,
-      olc::CORNFLOWER_BLUE,
-      olc::BIDOOF
+      olc::VERY_DARK_ORANGE,
+      olc::VERY_DARK_APPLE_GREEN,
+      olc::VERY_DARK_COBALT_BLUE,
+      olc::VERY_DARK_PURPLE,
+      olc::VERY_DARK_PINK,
+      olc::VERY_DARK_BROWN,
+      olc::VERY_DARK_CORNFLOWER_BLUE,
+      olc::VERY_DARK_BIDOOF
     };
 
     if (x < -10 || x > 15) {
@@ -166,15 +166,12 @@ namespace pge {
     const auto bl = viewport.bottomLeft();
     const auto tr = viewport.topRight();
 
-    // log("Viewport, bl: " + bl.str() + " tr: " + tr.str());
-
     for (int y = bl.y ; y < tr.y ; ++y) {
       for (int x = bl.x ; x < tr.x ; ++x) {
         [[maybe_unused]] const auto c = colorFromCoord(x, y);
         [[maybe_unused]] const auto pos = res.cf.tileCoordsToPixels(x, y);
         [[maybe_unused]] const auto scale = res.cf.tilesToPixels();
 
-        log("0 0 is at " + pos.str());
         FillRectDecal(pos, scale, c);
       }
     }

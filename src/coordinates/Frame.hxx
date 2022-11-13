@@ -36,10 +36,8 @@ namespace pge::coordinates {
     const auto dims = m_pixels.dims();
     olc::vi2d br = pixelCoordsToTiles(dims.x, dims.y);
 
-    log("tl: " + tl.str() + ", br: " + br.str());
-
     const auto out = IViewport(
-      olc::vf2d(br.x, tl.y),
+      olc::vf2d(tl.x, br.y),
       // The `+1` comes from the fact that the `br.x - tl.x` accounts for
       // the number of tiles in difference but does not count the actual
       // `tl.x` tile.
