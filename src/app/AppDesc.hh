@@ -3,7 +3,7 @@
 
 # include <string>
 # include "olcEngine.hh"
-# include "CoordinateFrame.hh"
+# include "Frame.hh"
 
 namespace pge {
 
@@ -25,7 +25,7 @@ namespace pge {
 
     // The coordinate frame to use to convert dimensions in
     // tiles to screen and pixels coordinates.
-    CoordinateFrameShPtr frame;
+    coordinates::FrameShPtr frame;
 
     // Whether or not the coordinate frame is fixed (meaning
     // that panning and zooming is disabled) or not.
@@ -43,7 +43,7 @@ namespace pge {
    */
   AppDesc
   newDesc(const olc::vi2d& dims,
-          CoordinateFrameShPtr cf,
+          coordinates::FrameShPtr cf,
           const std::string& name = "pge_app") noexcept;
 
 }

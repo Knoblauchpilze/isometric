@@ -8,7 +8,7 @@ namespace pge {
   inline
   bool
   PGEApp::RenderDesc::visible(const utils::Point2i& p, float r) const noexcept {
-    return cf.cellsViewport().visible(p, r);
+    return cf.cellsViewport().visible(p.x(), p.y(), r);
   }
 
   inline

@@ -1,9 +1,5 @@
 
-/**
- * @brief - Canonical application allowing to instantiate
- *          a working PGE process with configurable hooks
- *          to customize the behavior.
- */
+/// @brief - Exploration of a simple isometric app renderer.
 
 # include <core_utils/StdLogger.hh>
 # include <core_utils/PrefixedLogger.hh>
@@ -12,6 +8,8 @@
 # include "AppDesc.hh"
 # include "TopViewFrame.hh"
 # include "App.hh"
+
+using namespace pge::coordinates;
 
 int
 main(int /*argc*/, char** /*argv*/) {
@@ -24,14 +22,16 @@ main(int /*argc*/, char** /*argv*/) {
   try {
     logger.logMessage(utils::Level::Notice, "Starting application");
 
-    pge::Viewport tViewport = pge::Viewport(olc::vf2d(-6.0f, -5.0f), olc::vf2d(20.0f, 15.0f));
-    pge::Viewport pViewport = pge::Viewport(olc::vf2d(10.0f, 50.0f), olc::vf2d(800.0f, 600.0f));
-
-    pge::CoordinateFrameShPtr cf = std::make_shared<pge::TopViewFrame>(
-      tViewport,
-      pViewport,
-      olc::vi2d(64, 64)
+    auto tViewport = ViewportF(
+      olc::vf2d(0.0f, 0.0f),
+      olc::vf2d(20.0f, 15.0f)
     );
+    auto pViewport = ViewportF(
+      olc::vf2d(0.0f, 0.0f),
+      olc::vf2d(800.0f, 600.0f)
+    );
+
+    auto cf = std::make_shared<TopViewFrame>(tViewport, pViewport);
     pge::AppDesc ad = pge::newDesc(olc::vi2d(800, 600), cf, "isometric");
     pge::App demo(ad);
 

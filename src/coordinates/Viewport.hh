@@ -1,106 +1,90 @@
 #ifndef    VIEWPORT_HH
 # define   VIEWPORT_HH
 
-# include <maths_utils/Point2.hh>
+# include <maths_utils/Vector2.hh>
 # include "olcEngine.hh"
 
-namespace pge {
+namespace pge::coordinates {
 
-  /// @brief - Defines a viewport from its top left
-  /// corner and the associated dimensions.
+  /// @brief - Defines a viewport from its top left corner and the
+  /// associated dimensions.
+  template <typename Coordinate>
   class Viewport {
+    private:
+      using Vector = olc::v2d_generic<Coordinate>;
+
     public:
 
-      /**
-       * @brief - Create a new viewport with the specified
-       *          position and dimensions.
-       * @param tl - the top left corner of the viewport.
-       * @param dims - the dimensions of the viewport.
-       */
-      Viewport(const olc::vf2d& tl,
-               const olc::vf2d& dims) noexcept;
+      Viewport(const Vector& bl,
+               const Vector& dims) noexcept;
 
-      /**
-       * @brief - Return the top left corner of the viewport.
-       * @return - the top left corner.
-       */
-      olc::vf2d&
-      topLeft() noexcept;
+      Vector
+      bottomLeft() const noexcept;
 
-      /**
-       * @brief - Return the top left corner of the viewport.
-       * @return - the top left corner.
-       */
-      const olc::vf2d&
-      topLeft() const noexcept;
+      Vector
+      topRight() const noexcept;
 
-      /**
-       * @brief - Return the dimensions of the viewport.
-       * @return - the dimensions of the viewport.
-       */
-      olc::vf2d&
-      dims() noexcept;
-
-      /**
-       * @brief - Return the dimensions of the viewport.
-       * @return - the dimensions of the viewport.
-       */
-      const olc::vf2d&
+      const Vector&
       dims() const noexcept;
 
-      /**
-       * @brief - Whether or not a position with the specified
-       *          radius is at least partially visible based on
-       *          the viewport dimensions.
-       * @param p - the position to check.
-       * @param radius - the radius of the element.
-       * @return - `true` if the element is at least partially
-       *            visible.
-       */
-      bool
-      visible(const utils::Point2i& p, float radius = 1.0f) const noexcept;
+      void
+      move(const Vector& bottomLeft) noexcept;
+
+      void
+      scale(const Coordinate sx, const Coordinate sy) noexcept;
 
       /**
-       * @brief - Similar method to the above but handles position
-       *          as a floating point position and the radius as a
+       * @brief - Whether or not a position with the specified radius
+       *          is at least partially visible based on the viewport
+       *          dimensions.
+       * @param x - the abscissa of the point to check.
+       * @param y - the ordinate of the point to check.
+       * @param radius - the radius of the element.
+       * @return - `true` if the element is at least partially visible.
+       */
+      bool
+      visible(const Coordinate x,
+              const Coordinate y,
+              const Coordinate radius = Coordinate(1)) const noexcept;
+
+      /**
+       * @brief - Similar method to the above but handles position as
+       *          a floating point position and the radius as a
        *          rectangular-ish shape.
        * @param p - the position to check.
        * @param sz - the dimensions of the element.
-       * @return - `true` if the element is at least partially
-       *            visible.
+       * @return - `true` if the element is at least partially visible.
        */
       bool
-      visible(const olc::vf2d& p, const olc::vf2d& sz = olc::vf2d(1.0f, 1.0f)) const noexcept;
+      visible(const Vector& p,
+              const Vector& sz = Vector(Coordinate(1), Coordinate(1))) const noexcept;
 
     private:
 
-      /**
-       * @brief - Defines the origin of the viewport: it
-       *          represents the top left corner of the
-       *          view window.
-       */
-      olc::vf2d m_tl;
+      bool
+      visible(const Coordinate& x,
+              const Coordinate& y,
+              const Coordinate& sx,
+              const Coordinate& sy) const noexcept;
 
-      /**
-       * @brief - Represents the dimensions of the view
-       *          window along each axis.
-       */
-      olc::vf2d m_dims;
+    private:
 
-      /**
-       * @brief - Whether the cached version of the min
-       *          and max bounds for the viewport need
-       *          to be recomputed.
-       */
-      mutable bool m_dirty;
+      /// @brief - Defines the origin of the viewport: it represents
+      /// the bottom left corner of the view window.
+      Vector m_bl;
 
-      /**
-       * @brief - Cached version of the maximum point of
-       *          the viewport.
-       */
-      mutable olc::vf2d m_max;
+      /// @brief - Represents the dimensions of the view window along
+      /// each axis.
+      Vector m_dims;
+
+      /// @brief - Cached version of the maximum point of the viewport.
+      Vector m_tr;
   };
 
+  using ViewportI = Viewport<int>;
+  using ViewportF = Viewport<float>;
 }
+
+# include "Viewport.hxx"
 
 #endif    /* VIEWPORT_HH */

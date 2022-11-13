@@ -8,19 +8,19 @@ namespace pge {
 
   inline
   void
-  App::drawSprite(const SpriteDesc& t, const CoordinateFrame& cf) {
-    olc::vf2d p = cf.tileCoordsToPixels(t.x, t.y, t.loc, t.radius);
+  App::drawSprite(const SpriteDesc& t, const coordinates::Frame& cf) {
+    olc::vf2d p = cf.tileCoordsToPixels(t.x, t.y);
 
-    m_packs->draw(this, t.sprite, p, t.radius * cf.tileScale());
+    m_packs->draw(this, t.sprite, p, t.radius);
   }
 
   inline
   void
   App::drawRect(const SpriteDesc& t,
-                const CoordinateFrame& cf)
+                const coordinates::Frame& cf)
   {
-    olc::vf2d p = cf.tileCoordsToPixels(t.x, t.y, t.loc, t.radius);
-    FillRectDecal(p, t.radius * cf.tileSize(), t.sprite.tint);
+    olc::vf2d p = cf.tileCoordsToPixels(t.x, t.y);
+    FillRectDecal(p, {t.radius, t.radius}, t.sprite.tint);
   }
 
 }

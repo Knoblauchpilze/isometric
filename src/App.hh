@@ -59,7 +59,7 @@ namespace pge {
 
       void
       onInputs(const controls::State& c,
-               const CoordinateFrame& cf) override;
+               const coordinates::Frame& cf) override;
 
     private:
 
@@ -75,10 +75,6 @@ namespace pge {
         // The radius of the sprite: applied both along the x and y
         // coordinates.
         float radius;
-
-        // The relative position of the sprite compared to its
-        // position.
-        RelativePosition loc;
 
         // A description of the sprite.
         sprites::Sprite sprite;
@@ -100,7 +96,7 @@ namespace pge {
        *             conversion from tile position to pixels.
        */
       void
-      drawSprite(const SpriteDesc& t, const CoordinateFrame& cf);
+      drawSprite(const SpriteDesc& t, const coordinates::Frame& cf);
 
       /**
        * @brief - Used to draw a simple rect at the specified
@@ -112,7 +108,7 @@ namespace pge {
        */
       void
       drawRect(const SpriteDesc& t,
-               const CoordinateFrame& cf);
+               const coordinates::Frame& cf);
 
     private:
 

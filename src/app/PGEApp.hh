@@ -2,9 +2,10 @@
 # define   PGE_APP_HH
 
 # include <core_utils/CoreObject.hh>
+# include <maths_utils/Point2.hh>
 # include "olcEngine.hh"
 # include "AppDesc.hh"
-# include "CoordinateFrame.hh"
+# include "Frame.hh"
 # include "Controls.hh"
 
 namespace pge {
@@ -68,7 +69,7 @@ namespace pge {
       /// from screen coordinates to world coordinates and the UI.
       struct RenderDesc {
         // The coordinate frame to convert cells to pixels.
-        CoordinateFrame& cf;
+        coordinates::Frame& cf;
 
         /**
          * @brief - Convenience method allowing to determine if
@@ -248,7 +249,7 @@ namespace pge {
        */
       virtual void
       onInputs(const controls::State& c,
-               const CoordinateFrame& cf) = 0;
+               const coordinates::Frame& cf) = 0;
 
     private:
 
@@ -366,7 +367,7 @@ namespace pge {
        *          handles conversion between cells coordinate and
        *          screen coordinates and conversely.
        */
-      CoordinateFrameShPtr m_frame;
+      coordinates::FrameShPtr m_frame;
   };
 
 }
