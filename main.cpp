@@ -24,10 +24,12 @@ main(int /*argc*/, char** /*argv*/) {
 
     auto tViewport = ViewportF(
       olc::vf2d(0.0f, 0.0f),
+      // olc::vf2d(-6.0f, -5.0f),
       olc::vf2d(20.0f, 15.0f)
     );
     auto pViewport = ViewportF(
       olc::vf2d(0.0f, 0.0f),
+      // olc::vf2d(10.0f, 50.0f),
       olc::vf2d(800.0f, 600.0f)
     );
 

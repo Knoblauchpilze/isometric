@@ -11,17 +11,10 @@ namespace pge::coordinates {
     public:
       using IViewport = Viewport<float>;
 
-      Frame(const IViewport& cells,
-            const IViewport& pixels/*,
-            const olc::vf2d& tileSize*/);
+      Frame(const IViewport& tiles,
+            const IViewport& pixels);
 
       virtual ~Frame() = default;
-
-      /// @brief - Used to return the current scaling factor to apply
-      /// to the tile compared to their initial size.
-      /// @return - the scaling factor to apply to the tiles.
-      // const olc::vf2d&
-      // tileScale() const noexcept;
 
       /// @brief - Returns the actual size of the tile by applying the
       /// current scaling factor (as returned by `tileScale`) to the
@@ -30,19 +23,17 @@ namespace pge::coordinates {
       olc::vf2d
       tilesToPixels() const noexcept;
 
-      /// @brief - Return the current viewport expressed in cells. This
-      /// interface should be specialized by inheriting classes to account
-      /// for the precise layout of the coordinates system they define.
-      /// @return - the viewport of this coordinate frame in cells.
-      virtual IViewport
-      cellsViewport() const noexcept = 0;
+      /// @brief - Return the current viewport expressed in tiles.
+      /// @return - the viewport of this coordinate frame in tiles.
+      IViewport
+      cellsViewport() const noexcept;
 
       /// @brief - Used to convert from tile coordinates to pixel
       /// coordinates. This method can be used when some tile is to be
       /// displayed on the screen. We make use of a global position of
       /// the viewport to be able to correctly interpret the input cell.
       /// It is also dependent on the current scaling for tiles based on
-      /// the cells viewport. This method should be redefined by inheriting
+      /// the tiles viewport. This method should be redefined by inheriting
       /// classes for their specific purposes.
       /// @param x - the cell coordinate along the `x` axis.
       /// @param y - the cell coordinate along the `y` axis.
@@ -128,9 +119,9 @@ namespace pge::coordinates {
 
       /// @brief - Define the viewport for this coordinate frame. It
       /// represent the area that is visible for now given the position
-      /// of the camera. The viewport is expressed in cells and defined
+      /// of the camera. The viewport is expressed in tiles and defined
       /// through its top left corner and dimensions.
-      IViewport m_cells;
+      IViewport m_tiles;
 
       /// @brief - Define a similar element but for the pixels on screen.
       /// It is used to represent the pixels that can be displayed on the
@@ -147,11 +138,6 @@ namespace pge::coordinates {
 
       /// @brief - A value to scale from tiles value to pixels value.
       olc::vf2d m_tilesToPixelsScale;
-
-      /// @brief - The size of the tiles once scaled: convenience value
-      /// to cache the result of `m_ts * m_scale` as it is used quite
-      /// often.
-      // olc::vf2d m_tScaled;
 
       /// @brief - The origin of the translation (i.e. the pixels position
       /// when it started). Allows to compute the accumulated transform to

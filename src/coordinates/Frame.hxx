@@ -7,17 +7,14 @@
 namespace pge::coordinates {
 
   inline
-  Frame::Frame(const IViewport& cells,
-               const IViewport& pixels/*,
-               const olc::vf2d& tileSize*/):
+  Frame::Frame(const IViewport& tiles,
+               const IViewport& pixels):
     utils::CoreObject("frame"),
 
-    m_cells(cells),
+    m_tiles(tiles),
     m_pixels(pixels),
 
-    // m_ts(tileSize),
     m_tilesToPixelsScale(1.0f, 1.0f),
-    // m_tScaled(m_ts),
 
     m_translationOrigin(),
     m_cachedPOrigin()
@@ -26,17 +23,33 @@ namespace pge::coordinates {
     updateScale();
   }
 
-  // template <typename Coordinate>
-  // inline
-  // const olc::vf2d&
-  // Frame<Coordinate>::tileScale() const noexcept {
-  //   return m_scale;
-  // }
-
   inline
   olc::vf2d
   Frame::tilesToPixels() const noexcept {
     return m_tilesToPixelsScale;
+  }
+
+  inline
+  Frame::IViewport
+  Frame::cellsViewport() const noexcept {
+    olc::vi2d tl = pixelCoordsToTiles(0, 0);
+    const auto dims = m_pixels.dims();
+    olc::vi2d br = pixelCoordsToTiles(dims.x, dims.y);
+
+    log("tl: " + tl.str() + ", br: " + br.str());
+
+    const auto out = IViewport(
+      olc::vf2d(br.x, tl.y),
+      // The `+1` comes from the fact that the `br.x - tl.x` accounts for
+      // the number of tiles in difference but does not count the actual
+      // `tl.x` tile.
+      olc::vf2d(
+        br.x - tl.x + 1.0f,
+        tl.y - br.y + 1.0f
+      )
+    );
+
+    return out;
   }
 
   inline
@@ -74,7 +87,7 @@ namespace pge::coordinates {
   inline
   void
   Frame::updateScale() {
-    m_tilesToPixelsScale = m_pixels.dims() / m_cells.dims();
+    m_tilesToPixelsScale = m_pixels.dims() / m_tiles.dims();
 
     log(
       "1 tile = " + m_tilesToPixelsScale.str() + " pixel(s)",
@@ -96,8 +109,8 @@ namespace pge::coordinates {
 
     m_pixels.move(pos + d);
 
-    // Also update the dimensions of the cells viewport by `factor`.
-    m_cells.scale(factor, factor);
+    // Also update the dimensions of the tiles viewport by `factor`.
+    m_tiles.scale(factor, factor);
 
     updateScale();
   }

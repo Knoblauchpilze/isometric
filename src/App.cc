@@ -162,8 +162,7 @@ namespace pge {
       return;
     }
 
-    const auto viewport = coordinates::ViewportF(olc::vf2d(), olc::vf2d());
-    // const auto viewport = res.cf.cellsViewport();
+    const auto viewport = res.cf.cellsViewport();
     const auto bl = viewport.bottomLeft();
     const auto tr = viewport.topRight();
 
@@ -172,9 +171,11 @@ namespace pge {
     for (int y = bl.y ; y < tr.y ; ++y) {
       for (int x = bl.x ; x < tr.x ; ++x) {
         [[maybe_unused]] const auto c = colorFromCoord(x, y);
-        [[maybe_unused]] const auto pos = olc::vf2d();//res.cf.tileCoordsToPixels(x, y);
+        [[maybe_unused]] const auto pos = res.cf.tileCoordsToPixels(x, y);
         [[maybe_unused]] const auto scale = res.cf.tilesToPixels();
-        // FillRectDecal(pos, scale, c);
+
+        log("0 0 is at " + pos.str());
+        FillRectDecal(pos, scale, c);
       }
     }
 
