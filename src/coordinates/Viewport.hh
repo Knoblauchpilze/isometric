@@ -6,6 +6,12 @@
 
 namespace pge::coordinates {
 
+  /// @brief - The definition mode for a viewport.
+  enum class ViewportMode {
+    BOTTOM_LEFT_BASED,
+    TOP_LEFT_BASED
+  };
+
   /// @brief - Defines a viewport from its top left corner and the
   /// associated dimensions.
   template <typename Coordinate>
@@ -15,20 +21,38 @@ namespace pge::coordinates {
 
     public:
 
+      /// @brief - Create a viewport with a bottom left based mode.
       Viewport(const Vector& bl,
                const Vector& dims) noexcept;
+
+      /// @brief - Create a viewport with the corresponding definition
+      /// mode.
+      Viewport(const Vector& corner,
+               const Vector& dims,
+               const ViewportMode& mode) noexcept;
+
+      Vector
+      primaryCorner() const noexcept;
 
       Vector
       bottomLeft() const noexcept;
 
       Vector
+      bottomRight() const noexcept;
+
+      Vector
       topRight() const noexcept;
+
+      Vector
+      topLeft() const noexcept;
 
       const Vector&
       dims() const noexcept;
 
+      /// @brief - Moves the reference corner of this viewport (according
+      /// to the view mode) to the new position.
       void
-      move(const Vector& bottomLeft) noexcept;
+      move(const Vector& corner) noexcept;
 
       void
       scale(const Coordinate sx, const Coordinate sy) noexcept;
@@ -69,16 +93,16 @@ namespace pge::coordinates {
 
     private:
 
-      /// @brief - Defines the origin of the viewport: it represents
-      /// the bottom left corner of the view window.
-      Vector m_bl;
+      /// @brief - The mode defining how to interpret the corner used
+      /// as a definition for the viewport.
+      ViewportMode m_mode;
+
+      /// @brief - Defines the principal corner of the viewport.
+      Vector m_corner;
 
       /// @brief - Represents the dimensions of the view window along
       /// each axis.
       Vector m_dims;
-
-      /// @brief - Cached version of the maximum point of the viewport.
-      Vector m_tr;
   };
 
   using ViewportI = Viewport<int>;

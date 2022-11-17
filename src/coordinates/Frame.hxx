@@ -70,7 +70,7 @@ namespace pge::coordinates {
   void
   Frame::beginTranslation(const olc::vf2d& origin) {
     m_translationOrigin = origin;
-    m_cachedPOrigin = m_pixels.bottomLeft();
+    m_cachedPOrigin = m_pixels.primaryCorner();
   }
 
   inline
@@ -96,18 +96,29 @@ namespace pge::coordinates {
   inline
   void
   Frame::zoom(const olc::vf2d& pos, const float factor) {
-    // What we know is that the top left cell of the viewport is at the
-    // top left corner of the pixels viewport.
-    // We can compute the distance from the `pos` to the pixels viewport
-    // origin: it should be applied the *inverse* of the `factor`
-    // and we should be good to go: indeed if a viewport has its span
-    // reduced, distances are lengthened (and conversely).
-    olc::vf2d d = m_pixels.bottomLeft() - pos;
-    d /= factor;
+    // We want to zoom on the `pos` position by a factor in input.
+    // The invariant is that each corner of the pixels' viewport
+    // corresponds to the respective corner of the tiles' viewport.
+    // In order to zoom, we only have to zoom in one of the viewport.
+    // The mapping between both will automatically make the smaller
+    // or larger other viewport match the same space.
+    // As the pixels' viewport doesn't change, there's no reason for
+    // it to be modified, so we focus on the tiles' viewport.
+    // The idea is to compute the distance between the input position
+    // and one corner, and then scale this value by the `factor`: it
+    // will guarantee that we get the same position for the initial
+    // position as it is propostionnally at the same position from
+    // the corner of the viewport.
+    // As we get a position in pixels, we have to convert in tiles
+    // before performing the computation.
 
-    m_pixels.move(pos + d);
+    olc::vf2d intra;
+    auto tiles = pixelCoordsToTiles(pos.x, pos.y, &intra);
+    olc::vf2d tPos(tiles.x + intra.x, tiles.y + intra.y);
+    olc::vf2d d = m_tiles.bottomLeft() - tPos;
 
-    // Also update the dimensions of the tiles viewport by `factor`.
+    d *= factor;
+    m_tiles.move(tPos + d);
     m_tiles.scale(factor, factor);
 
     updateScale();

@@ -27,7 +27,7 @@ namespace {
     if (x < -10 || x > 15) {
       return olc::BLACK;
     }
-    if (y < -20 || y > 25) {
+    if (y < -20 || y > 3) {
       return olc::VERY_DARK_GREY;
     }
 

@@ -8,7 +8,7 @@ namespace pge::coordinates {
   class TopViewFrame: public Frame {
     public:
 
-      TopViewFrame(const IViewport& cells,
+      TopViewFrame(const IViewport& tiles,
                    const IViewport& pixels);
 
       virtual ~TopViewFrame() = default;

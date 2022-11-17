@@ -52,20 +52,24 @@ namespace pge::coordinates {
                                       const IViewport& dest) const noexcept
   {
     auto tx = x;
-    tx -= source.bottomLeft().x;
-    tx /= source.dims().x;
     if (invertX) {
-      tx = 1.0f - tx;
+      tx = source.bottomLeft().x - tx;
     }
+    else {
+      tx -= source.bottomLeft().x;
+    }
+    tx /= source.dims().x;
     tx *= dest.dims().x;
     tx += dest.bottomLeft().x;
 
     auto ty = y;
-    ty -= source.bottomLeft().y;
-    ty /= source.dims().y;
     if (invertY) {
-      ty = 1.0f - ty;
+      ty = source.bottomLeft().y - ty;
     }
+    else {
+      ty -= source.bottomLeft().y;
+    }
+    ty /= source.dims().y;
     ty *= dest.dims().y;
     ty += dest.bottomLeft().y;
 

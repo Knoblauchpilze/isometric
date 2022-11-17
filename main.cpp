@@ -22,18 +22,31 @@ main(int /*argc*/, char** /*argv*/) {
   try {
     logger.logMessage(utils::Level::Notice, "Starting application");
 
-    auto tViewport = ViewportF(
+    auto tiles = ViewportF(
       olc::vf2d(0.0f, 0.0f),
       // olc::vf2d(-6.0f, -5.0f),
       olc::vf2d(20.0f, 15.0f)
     );
-    auto pViewport = ViewportF(
+    auto pixels = ViewportF(
       olc::vf2d(0.0f, 0.0f),
       // olc::vf2d(10.0f, 50.0f),
-      olc::vf2d(800.0f, 600.0f)
+      olc::vf2d(800.0f, 600.0f),
+      ViewportMode::TOP_LEFT_BASED
     );
 
-    auto cf = std::make_shared<TopViewFrame>(tViewport, pViewport);
+    logger.logMessage(utils::Level::Info, "Tiles");
+    logger.logMessage(utils::Level::Info, "bl: " + tiles.bottomLeft().str());
+    logger.logMessage(utils::Level::Info, "br: " + tiles.bottomRight().str());
+    logger.logMessage(utils::Level::Info, "tr: " + tiles.topRight().str());
+    logger.logMessage(utils::Level::Info, "tl: " + tiles.topLeft().str());
+    
+    logger.logMessage(utils::Level::Info, "Pixels");
+    logger.logMessage(utils::Level::Info, "bl: " + pixels.bottomLeft().str());
+    logger.logMessage(utils::Level::Info, "br: " + pixels.bottomRight().str());
+    logger.logMessage(utils::Level::Info, "tr: " + pixels.topRight().str());
+    logger.logMessage(utils::Level::Info, "tl: " + pixels.topLeft().str());
+
+    auto cf = std::make_shared<TopViewFrame>(tiles, pixels);
     pge::AppDesc ad = pge::newDesc(olc::vi2d(800, 600), cf, "isometric");
     pge::App demo(ad);
 
