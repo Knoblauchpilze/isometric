@@ -66,6 +66,18 @@ namespace pge {
 
   inline
   void
+  PGEApp::setCoordinateFrame(coordinates::FrameShPtr frame) {
+    if (frame == nullptr) {
+      warn("Discarding request to install null coordinate frame");
+      return;
+    }
+
+    info("Installing new coordinate frame for app");
+    m_frame = frame;
+  }
+
+  inline
+  void
   PGEApp::clearLayer() {
     // Clear the canvas with a neutral fully transparent color.
     SetPixelMode(olc::Pixel::ALPHA);

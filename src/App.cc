@@ -1,5 +1,7 @@
 
 # include "App.hh"
+# include "TopViewFrame.hh"
+# include "IsometricViewFrame.hh"
 
 namespace {
   olc::Pixel
@@ -45,7 +47,9 @@ namespace pge {
     m_state(nullptr),
     m_menus(),
 
-    m_packs(std::make_shared<TexturePack>())
+    m_packs(std::make_shared<TexturePack>()),
+
+    m_isometric(false)
   {}
 
   bool
@@ -100,6 +104,22 @@ namespace pge {
 
     if (c.keys[controls::keys::P]) {
       m_game->togglePause();
+    }
+
+    if (c.buttons[controls::mouse::Middle] == controls::ButtonState::Released) {
+      auto tiles = coordinates::ViewportF(olc::vf2d(-6.0f, -5.0f), olc::vf2d(20.0f, 15.0f));
+      auto pixels = coordinates::ViewportF(olc::vf2d(10.0f, 50.0f), olc::vf2d(800.0f, 600.0f), coordinates::ViewportMode::TOP_LEFT_BASED);
+
+      coordinates::FrameShPtr cf;
+      if (m_isometric) {
+        cf = std::make_shared<coordinates::TopViewFrame>(tiles, pixels);
+      }
+      else {
+        cf = std::make_shared<coordinates::IsometricViewFrame>(tiles, pixels);
+      }
+
+      setCoordinateFrame(cf);
+      m_isometric = !m_isometric;
     }
   }
 

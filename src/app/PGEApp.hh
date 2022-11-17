@@ -131,6 +131,14 @@ namespace pge {
       setLayerTint(const Layer& layer, const olc::Pixel& tint);
 
       /**
+       * @brief - Defines a new coordinate frame to be used for
+       *          this app.
+       * @param frame - the new coordinate frame to use.
+       */
+      void
+      setCoordinateFrame(coordinates::FrameShPtr frame);
+
+      /**
        * @brief - Another interface method allowing to clear
        *          a rendering layer when it's disabled. This
        *          allows to make sure that we won't keep old

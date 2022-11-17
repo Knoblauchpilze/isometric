@@ -112,29 +112,22 @@ namespace pge {
 
     private:
 
-      /**
-       * @brief - The game managed by this application.
-       */
+      /// @brief - The game managed by this application.
       GameShPtr m_game;
 
-      /**
-       * @brief - The management of the game state, which includes
-       *          loading the saved games, handling game over and
-       *          such things.
-       */
+      /// @brief - The management of the game state, which includes
+      /// loading the saved games, handling game over and such things.
       GameStateShPtr m_state;
 
-      /**
-       * @brief - Defines the list of menus available for
-       *          this app.
-       */
+      /// @brief - Defines the list of menus available for this app.
       std::vector<MenuShPtr> m_menus;
 
-      /**
-       * @brief - A description of the textures used to represent
-       *          the elements of the game.
-       */
+      /// @brief - A description of the textures used to represent the
+      /// elements of the game.
       TexturePackShPtr m_packs;
+
+      /// @brief - The current frame used.
+      bool m_isometric;
   };
 
 }
