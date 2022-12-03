@@ -47,6 +47,18 @@ namespace pge {
     return id;
   }
 
+  olc::Decal*
+  TexturePack::getDecalForPack(const unsigned packID) const {
+    if (packID >= m_packs.size()) {
+      error(
+        "Unable to find decal associated to pack " + std::to_string(packID),
+        "Only " + std::to_string(m_packs.size()) + " pack(s) available"
+      );
+    }
+
+    return m_packs[packID].res;
+  }
+
   void
   TexturePack::draw(olc::PixelGameEngine* pge,
                     const sprites::Sprite& s,

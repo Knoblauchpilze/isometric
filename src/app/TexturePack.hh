@@ -80,6 +80,17 @@ namespace pge {
       registerPack(const sprites::Pack& pack);
 
       /**
+       * @brief - Return the decal associated to the pack with
+       *          the corresponding identifier. In case no such
+       *          pack exists, an error is returned.
+       * @param packID - the identifier of the pack for which
+       *                 the decal should be returned.
+       * @return - the decal pointer associated to the pack.
+       */
+      olc::Decal*
+      getDecalForPack(const unsigned packID) const;
+
+      /**
        * @brief - Used to perform the drawing of the sprite as
        *          defined by the input argument using the engine.
        *          The sprite will be associated internally with

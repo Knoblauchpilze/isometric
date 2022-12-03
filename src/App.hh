@@ -126,6 +126,8 @@ namespace pge {
       /// elements of the game.
       TexturePackShPtr m_packs;
 
+      unsigned m_planetPackID;
+
       /// @brief - The current frame used.
       bool m_isometric;
   };

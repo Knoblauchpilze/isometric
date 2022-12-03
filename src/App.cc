@@ -51,8 +51,9 @@ namespace pge {
     m_menus(),
 
     m_packs(std::make_shared<TexturePack>()),
+    m_planetPackID(),
 
-    m_isometric(false)
+    m_isometric(true)
   {}
 
   bool
@@ -134,18 +135,22 @@ namespace pge {
 
   void
   App::loadResources() {
-    // Assign a specific tint to the regular
-    // drawing layer so that we have a built
-    // in transparency.
-    // We can't do it directly when drawing
-    // in the rendering function because as
-    // the whole layer will be drawn as one
-    // quad in opengl with an opaque alpha,
-    // we will lose this info.
-    // This means that everything is indeed
-    // transparent but that's the only way
-    // for now to achieve it.
+    // Assign a specific tint to the regular drawing layer so that we
+    // have a built in transparency.
+    // We can't do it directly when drawing in the rendering function
+    // because as the whole layer will be drawn as one quad in opengl
+    // with an opaque alpha, we will lose this info.
+    // This means that everything is indeed transparent but that's the
+    // only way for now to achieve it.
     setLayerTint(Layer::Draw, olc::Pixel(255, 255, 255, alpha::SemiOpaque));
+
+    pge::sprites::Pack pack;
+    pack.file = "data/img/planet.png";
+    constexpr auto TILE_SIZE = 1000;
+    pack.sSize = olc::vi2d(TILE_SIZE, TILE_SIZE);
+    pack.layout = olc::vi2d(1, 1);
+
+    m_planetPackID = m_packs->registerPack(pack);
 
     info("Load app resources in the 'm_packs' attribute");
   }
@@ -274,6 +279,26 @@ namespace pge {
 
     // const auto pos = res.cf.tileCoordsToPixels(mtp.x, mtp.y);
     // FillRectDecal(pos, res.cf.tilesToPixels(), olc::Pixel(255, 255, 0, alpha::SemiOpaque));
+
+    constexpr auto PLANET_SCALE = 0.05f;
+    DrawDecal(
+      mp,
+      m_packs->getDecalForPack(m_planetPackID),
+      olc::vf2d(PLANET_SCALE, PLANET_SCALE),
+      olc::ORANGE
+    );
+
+# ifdef CANONICAL_SPRITE_EXAMPLE
+    sd.x = x;
+    sd.y = y;
+
+    sd.sprite.pack = m_planetPackID;
+    sd.sprite.id = 0;
+    sd.sprite.tint = olc::WHITE;
+    sd.sprite.sprite = olc::vi2d(0, 0);
+
+    drawSprite(sd, res.cf);
+# endif
 
     SetPixelMode(olc::Pixel::NORMAL);
   }

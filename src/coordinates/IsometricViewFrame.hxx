@@ -75,6 +75,7 @@ namespace pge::coordinates {
                                             const Mat2f& transform,
                                             const IViewport& dest) const noexcept
   {
+    // Convert to normalized coordinate space from the source.
     auto tx = x;
     if (invertX) {
       tx = source.bottomLeft().x - tx;
@@ -93,17 +94,13 @@ namespace pge::coordinates {
     }
     ty /= source.dims().y;
 
-    std::cout << "---" << std::endl;
-    std::cout << "mat: " << std::endl << transform << std::endl;
+    // Apply the coordinate frame transform.
     Vec2f v(tx, ty);
-    std::cout << "init: " << std::endl << v << std::endl;
     Vec2f tr = transform * v;
-    std::cout << "transform: " << std::endl << tr << std::endl;
-    std::cout << "---" << std::endl;
-
     tx = tr(0);
     ty = tr(1);
 
+    // Convert back to the destination viewport.
     tx *= dest.dims().x;
     tx += dest.bottomLeft().x;
 
