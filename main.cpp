@@ -7,6 +7,7 @@
 # include <core_utils/CoreException.hh>
 # include "AppDesc.hh"
 # include "TopViewFrame.hh"
+# include "IsometricViewFrame.hh"
 # include "App.hh"
 
 using namespace pge::coordinates;
@@ -23,16 +24,18 @@ main(int /*argc*/, char** /*argv*/) {
     logger.logMessage(utils::Level::Notice, "Starting application");
 
     auto tiles = ViewportF(
-      olc::vf2d(-6.0f, -5.0f),
+      //olc::vf2d(-6.0f, -5.0f),
+      olc::vf2d(0.0f, 0.0f),
       olc::vf2d(20.0f, 15.0f)
     );
     auto pixels = ViewportF(
-      olc::vf2d(10.0f, 50.0f),
+      //olc::vf2d(10.0f, 50.0f),
+      olc::vf2d(0.0f, 0.0f),
       olc::vf2d(800.0f, 600.0f),
       ViewportMode::TOP_LEFT_BASED
     );
 
-    auto cf = std::make_shared<TopViewFrame>(tiles, pixels);
+    auto cf = std::make_shared<IsometricViewFrame>(tiles, pixels);
     pge::AppDesc ad = pge::newDesc(olc::vi2d(800, 600), cf, "isometric");
     pge::App demo(ad);
 

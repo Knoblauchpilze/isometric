@@ -1,11 +1,13 @@
 project (main-app_lib)
 
-set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD 20)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS OFF)
 
 #set (CMAKE_VERBOSE_MAKEFILE ON)
 set (CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+find_package (Eigen3 3.4 REQUIRED NO_MODULE)
 
 add_library (main-app_lib SHARED "")
 
@@ -37,6 +39,7 @@ target_link_libraries (main-app_lib
 	GL
 	pthread
 	stdc++fs
+	Eigen3::Eigen
 	)
 
 target_include_directories (main-app_lib PUBLIC

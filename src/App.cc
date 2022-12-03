@@ -3,7 +3,10 @@
 # include "TopViewFrame.hh"
 # include "IsometricViewFrame.hh"
 
+// # define SQUARES
+
 namespace {
+# ifdef SQUARES
   olc::Pixel
   colorFromCoord(const int x, const int y) {
     constexpr auto size = 4;
@@ -35,7 +38,7 @@ namespace {
 
     return colors[((y % size) * 4 + (x % size)) % colors.size()];
   }
-
+# endif
 }
 
 namespace pge {
@@ -171,7 +174,11 @@ namespace pge {
   }
 
   void
+# ifdef SQUARES
   App::drawDecal(const RenderDesc& res) {
+# else
+  App::drawDecal(const RenderDesc& /*res*/) {
+# endif
     // Clear rendering target.
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::VERY_DARK_GREY);
@@ -182,19 +189,21 @@ namespace pge {
       return;
     }
 
+# ifdef SQUARES
     const auto viewport = res.cf.cellsViewport();
     const auto bl = viewport.bottomLeft();
     const auto tr = viewport.topRight();
 
     for (int y = bl.y ; y < tr.y ; ++y) {
       for (int x = bl.x ; x < tr.x ; ++x) {
-        [[maybe_unused]] const auto c = colorFromCoord(x, y);
-        [[maybe_unused]] const auto pos = res.cf.tileCoordsToPixels(x, y);
-        [[maybe_unused]] const auto scale = res.cf.tilesToPixels();
+        const auto c = colorFromCoord(x, y);
+        const auto pos = res.cf.tileCoordsToPixels(x, y);
+        const auto scale = res.cf.tilesToPixels();
 
         FillRectDecal(pos, scale, c);
       }
     }
+# endif
 
     SetPixelMode(olc::Pixel::NORMAL);
   }
@@ -263,8 +272,8 @@ namespace pge {
     DrawString(olc::vi2d(0, h / 2 + 1 * dOffset), "World cell coords : " + toString(mtp), olc::CYAN);
     DrawString(olc::vi2d(0, h / 2 + 2 * dOffset), "Intra cell        : " + toString(it), olc::CYAN);
 
-    const auto pos = res.cf.tileCoordsToPixels(mtp.x, mtp.y);
-    FillRectDecal(pos, res.cf.tilesToPixels(), olc::Pixel(255, 255, 0, alpha::SemiOpaque));
+    // const auto pos = res.cf.tileCoordsToPixels(mtp.x, mtp.y);
+    // FillRectDecal(pos, res.cf.tilesToPixels(), olc::Pixel(255, 255, 0, alpha::SemiOpaque));
 
     SetPixelMode(olc::Pixel::NORMAL);
   }

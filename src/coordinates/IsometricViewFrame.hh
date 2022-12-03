@@ -1,6 +1,7 @@
 #ifndef    ISOMETRICVIEW_FRAME_HH
 # define   ISOMETRICVIEW_FRAME_HH
 
+# include <eigen3/Eigen/Eigen>
 # include "Frame.hh"
 
 namespace pge::coordinates {
@@ -25,13 +26,32 @@ namespace pge::coordinates {
 
     private:
 
+      /// @brief - Convenience Eigen defines.
+      using Mat2f = Eigen::Matrix2f;
+      using Vec2f = Eigen::Vector2f;
+
+      void
+      generateMatrices();
+
       olc::vf2d
       coordinateFrameChange(const float x,
                             bool invertX,
                             const float y,
                             bool invertY,
                             const IViewport& source,
+                            const Mat2f& transform,
                             const IViewport& dest) const noexcept;
+
+    private:
+
+      /// @brief - The transformation matrix allowing to move from the
+      /// pixel coordinate space to the world coordinate space.
+      Mat2f m_pixToWorldMat;
+
+      /// @brief - The transformation matrix allowing to move from the
+      /// world coordinate space to the pixel coordinate space. This is
+      /// the inverse matrix of the previous one.
+      Mat2f m_worldToPixMat;
   };
 
 }
