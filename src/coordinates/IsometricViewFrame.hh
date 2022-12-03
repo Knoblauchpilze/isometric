@@ -16,7 +16,9 @@ namespace pge::coordinates {
 
       /// @brief - Implementation of the interface method.
       olc::vf2d
-      tileCoordsToPixels(float cx, float cy) const noexcept override;
+      tileCoordsToPixels(float cx,
+                         float cy,
+                         const TileLocation& location = TileLocation::TopLeft) const noexcept override;
 
       /// @brief - Implementation of the interface method.
       olc::vi2d

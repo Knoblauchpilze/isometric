@@ -36,6 +36,7 @@ main(int /*argc*/, char** /*argv*/) {
     );
 
     auto cf = std::make_shared<IsometricViewFrame>(tiles, pixels);
+    // auto cf = std::make_shared<TopViewFrame>(tiles, pixels);
     pge::AppDesc ad = pge::newDesc(olc::vi2d(800, 600), cf, "isometric");
     pge::App demo(ad);
 

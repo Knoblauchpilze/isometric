@@ -13,13 +13,37 @@ namespace pge::coordinates {
 
   inline
   olc::vf2d
-  TopViewFrame::tileCoordsToPixels(float cx, float cy) const noexcept {
+  TopViewFrame::tileCoordsToPixels(float cx,
+                                   float cy,
+                                   const TileLocation& location) const noexcept
+  {
     auto out = coordinateFrameChange(cx, false, cy, true, m_tiles, m_pixels);
     // The offset accounts for the fact that the bottom tile is visible.
     // If we don't do that the effective viewport is in fact:
     // [m_tiles.bottomLeft().y + 1; m_tiles.topRight()] when it should be
     // [m_tiles.bottomLeft().y; m_tiles.topRight() - 1].
-    return olc::vf2d{out.x, out.y - m_tilesToPixelsScale.y};
+    olc::vf2d topLeft{out.x, out.y - m_tilesToPixelsScale.y};
+
+    olc::vf2d ttp = tilesToPixels();
+    switch (location) {
+      case TileLocation::TopCenter:
+        return olc::vf2d(topLeft.x + ttp.x / 2.0f, topLeft.y);
+      case TileLocation::TopRight:
+        return olc::vf2d(topLeft.x + ttp.x, topLeft.y);
+      case TileLocation::RightCenter:
+        return olc::vf2d(topLeft.x + ttp.x, topLeft.y + ttp.y / 2.0f);
+      case TileLocation::BottomRight:
+        return topLeft + tilesToPixels();
+      case TileLocation::BottomCenter:
+        return olc::vf2d(topLeft.x + ttp.x / 2.0f, topLeft.y + ttp.y);
+      case TileLocation::BottomLeft:
+        return olc::vf2d(topLeft.x, topLeft.y + ttp.y);
+      case TileLocation::LeftCenter:
+        return olc::vf2d(topLeft.x, topLeft.y + ttp.y / 2.0f);
+      case TileLocation::TopLeft:
+      default:
+        return topLeft;
+    }
   }
 
   inline

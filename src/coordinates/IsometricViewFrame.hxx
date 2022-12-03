@@ -19,13 +19,36 @@ namespace pge::coordinates {
 
   inline
   olc::vf2d
-  IsometricViewFrame::tileCoordsToPixels(float cx, float cy) const noexcept {
+  IsometricViewFrame::tileCoordsToPixels(float cx,
+                                         float cy,
+                                         const TileLocation& location) const noexcept
+  {
+    switch (location) {
+      case TileLocation::TopCenter:
+        return tileCoordsToPixels(cx + 0.5f, cy);
+      case TileLocation::TopRight:
+        return tileCoordsToPixels(cx + 1.0f, cy);
+      case TileLocation::RightCenter:
+        return tileCoordsToPixels(cx + 1.0f, cy + 0.5f);
+      case TileLocation::BottomRight:
+        return tileCoordsToPixels(cx + 1.0f, cy + 1.0f);
+      case TileLocation::BottomCenter:
+        return tileCoordsToPixels(cx + 0.5f, cy + 1.0f);
+      case TileLocation::BottomLeft:
+        return tileCoordsToPixels(cx, cy + 1.0f);
+      case TileLocation::LeftCenter:
+        return tileCoordsToPixels(cx, cy + 0.5f);
+      case TileLocation::TopLeft:
+      default:
+        break;
+    }
+
     auto out = coordinateFrameChange(cx, false, cy, true, m_tiles, m_worldToPixMat, m_pixels);
     // The offset accounts for the fact that the bottom tile is visible.
     // If we don't do that the effective viewport is in fact:
     // [m_tiles.bottomLeft().y + 1; m_tiles.topRight()] when it should be
     // [m_tiles.bottomLeft().y; m_tiles.topRight() - 1].
-    return olc::vf2d{out.x, out.y - m_tilesToPixelsScale.y};
+    return olc::vf2d{out.x, out.y};
   }
 
   inline
@@ -52,17 +75,21 @@ namespace pge::coordinates {
   IsometricViewFrame::generateMatrices() {
     // See this link:
     // https://gamedev.stackexchange.com/questions/31113/how-can-i-improve-my-isometric-tile-picking-algorithm
-    constexpr auto alpha = -std::numbers::pi / 4.0f;
+    constexpr auto alpha = -std::numbers::pi / 40.0f;
 
     Mat2f rotation;
     rotation << std::cos(alpha), -std::sin(alpha),
                 std::sin(alpha), std::cos(alpha);
 
-    Mat2f scale = Eigen::Scaling(1.0f, 0.5f);
+    // Mat2f scale = Eigen::Scaling(1.0f, 0.5f);
+    Mat2f scale = Eigen::Scaling(1.0f, 1.0f);
 
     m_pixToWorldMat = rotation * scale;
 
     m_worldToPixMat = m_pixToWorldMat.inverse();
+
+    std::cout << "pixToWorld: " << std::endl << m_pixToWorldMat << std::endl;
+    std::cout << "worldToPix: " << std::endl << m_worldToPixMat << std::endl;
   }
 
   inline

@@ -51,6 +51,18 @@ namespace pge::coordinates {
   }
 
   inline
+  olc::vf2d
+  Frame::tileCoordsToPixels(const olc::vf2d pos, const TileLocation& location) const noexcept {
+    return tileCoordsToPixels(pos.x, pos.y, location);
+  }
+
+  inline
+  olc::vi2d
+  Frame::pixelCoordsToTiles(const olc::vf2d pos) const noexcept {
+    return pixelCoordsToTiles(pos);
+  }
+
+  inline
   void
   Frame::zoomIn(const olc::vf2d& pos,
                 const float factor)

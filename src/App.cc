@@ -280,13 +280,44 @@ namespace pge {
     // const auto pos = res.cf.tileCoordsToPixels(mtp.x, mtp.y);
     // FillRectDecal(pos, res.cf.tilesToPixels(), olc::Pixel(255, 255, 0, alpha::SemiOpaque));
 
-    constexpr auto PLANET_SCALE = 0.05f;
-    DrawDecal(
-      mp,
+    // constexpr auto PLANET_SCALE = 0.05f;
+    // DrawDecal(
+    //   mp,
+    //   m_packs->getDecalForPack(m_planetPackID),
+    //   olc::vf2d(PLANET_SCALE, PLANET_SCALE),
+    //   olc::ORANGE
+    // );
+
+    const olc::vf2d tl = res.cf.tileCoordsToPixels(mtp, coordinates::TileLocation::TopLeft);
+    const olc::vf2d tr = res.cf.tileCoordsToPixels(mtp, coordinates::TileLocation::TopRight);
+    const olc::vf2d br = res.cf.tileCoordsToPixels(mtp, coordinates::TileLocation::BottomRight);
+    const olc::vf2d bl = res.cf.tileCoordsToPixels(mtp, coordinates::TileLocation::BottomLeft);
+    // const olc::vf2d tl(200.0f, 100.0f);
+    // const olc::vf2d bl(tl.x, tl.y + 100.0f);
+    // const olc::vf2d br(tl.x + 100.0f, tl.y + 100.0f);
+    // const olc::vf2d tr(tl.x + 100.0f, tl.y);
+
+    log(
+      "p: " + mtp.str() +
+      " decal: " + tl.str() + "/" + res.cf.tileCoordsToPixels(mtp.x, mtp.y).str() +
+      " - " + tr.str() +
+      " -- " + bl.str() +
+      " - " + br.str()
+    );
+    DrawWarpedDecal(
       m_packs->getDecalForPack(m_planetPackID),
-      olc::vf2d(PLANET_SCALE, PLANET_SCALE),
+      {tl, bl, br, tr},
       olc::ORANGE
     );
+
+    // std::array<olc::vf2d, 4> points = {
+    //   {
+    //     {pos},
+    //     {pos.x, pos.y + size.y},
+    //     {pos + size},
+    //     {pos.x + size.x, pos.y}
+    //   }
+    // };
 
 # ifdef CANONICAL_SPRITE_EXAMPLE
     sd.x = x;

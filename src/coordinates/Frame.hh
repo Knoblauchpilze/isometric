@@ -7,6 +7,18 @@
 
 namespace pge::coordinates {
 
+  /// @brief - Defines a location within a tile.
+  enum class TileLocation {
+    TopLeft,
+    TopCenter,
+    TopRight,
+    RightCenter,
+    BottomRight,
+    BottomCenter,
+    BottomLeft,
+    LeftCenter
+  };
+
   class Frame: public utils::CoreObject {
     public:
       using IViewport = Viewport<float>;
@@ -37,10 +49,22 @@ namespace pge::coordinates {
       /// classes for their specific purposes.
       /// @param x - the cell coordinate along the `x` axis.
       /// @param y - the cell coordinate along the `y` axis.
+      /// @param location - the location within the tile.
       /// @return - the coordinates in pixels of the tile defined by the
       /// input coords.
       virtual olc::vf2d
-      tileCoordsToPixels(float x, float y) const noexcept = 0;
+      tileCoordsToPixels(float x,
+                         float y,
+                         const TileLocation& location = TileLocation::TopLeft) const noexcept = 0;
+
+      /// @brief - Variant with a vector instead of two singular values.
+      /// @param pos - the position to convert.
+      /// @param location - the location within the tile.
+      /// @return - the coordinates in pixels of the tile defined by the
+      /// input coords.
+      olc::vf2d
+      tileCoordsToPixels(const olc::vf2d pos,
+                         const TileLocation& location = TileLocation::TopLeft) const noexcept;
 
       /// @brief - Convert from pixels coordinates to tile coords. Some
       /// extra logic is added in order to account for the tiles that do
@@ -58,6 +82,13 @@ namespace pge::coordinates {
       pixelCoordsToTiles(float px,
                          float py,
                          olc::vf2d* intraTile = nullptr) const noexcept = 0;
+
+      /// @brief - Variant with a vector instead of two singular values.
+      /// @param pos - the position to convert.
+      /// @return - the coordinates in tiles of the position defined by
+      /// the input coords.
+      olc::vi2d
+      pixelCoordsToTiles(const olc::vf2d pos) const noexcept;
 
       /// @brief - Used to perform the zoom operation requested. The
       /// viewports will be updated to be smaller than the current value
